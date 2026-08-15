@@ -1,0 +1,7 @@
+Model,Train_R2,LOO_R2,LOO_MAE
+GPR (Matérn 5/2),0.9997,0.9656,0.0284
+Polynomial (deg 2),0.9734,0.9057,0.0613
+Polynomial (deg 3),0.9933,0.9447,0.0445
+Random Forest,0.9728,0.8498,0.075
+XGBoost,1.0,0.7929,0.1001
+PINN (PSO-constrained),0.9999,0.9887,0.0205

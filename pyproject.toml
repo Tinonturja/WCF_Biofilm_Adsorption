@@ -1,0 +1,34 @@
+[project]
+name = "wcf-biofilm-adsorption"
+version = "1.0.0"
+description = "Kinetic, isotherm, molecular-dynamics-informed, and physics-informed neural network modeling of reactive dye adsorption on a waste-cotton-derived PVA/TiO2/cellulose biofilm"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [
+    { name = "Md Shajjad Khan Faisal" },
+    { name = "Tinon Turja Majumder" },
+    { name = "Kazi Sirajul Islam", email = "kazisirajul@dce.butex.edu.bd" },
+    { name = "Sk. Mainuddin" },
+    { name = "Mohammad Forhad Hossain" },
+    { name = "Niger Sultana" },
+]
+dependencies = [
+    "numpy==2.2.6",
+    "scipy==1.15.3",
+    "pandas==2.3.3",
+    "scikit-learn==1.7.2",
+    "matplotlib==3.10.9",
+    "xgboost==3.0.5",
+    "torch==2.6.0",
+]
+
+[project.urls]
+Repository = "https://github.com/<your-username>/wcf-biofilm-adsorption"
+
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]

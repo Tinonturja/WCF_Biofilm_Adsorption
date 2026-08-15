@@ -1,0 +1,11 @@
+__pycache__/
+*.pyc
+.DS_Store
+venv/
+.env/
+.venv/
+venv_test/
+wheels/
+vendor/
+*.egg-info/
+.ipynb_checkpoints/
