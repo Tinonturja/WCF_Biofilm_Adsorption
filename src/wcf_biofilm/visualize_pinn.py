@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.colors import LinearSegmentedColormap
 
-from .wcf_common import RES_DIR, save   # shared paths + 300 DPI PNG / vector PDF saver
+from .wcf_common import RES_DIR, save   # shared paths + 600 DPI PNG / vector PDF saver
 
 # ---------------- shared styling (matches the other paper figures) -------------
 mpl.rcParams.update({
