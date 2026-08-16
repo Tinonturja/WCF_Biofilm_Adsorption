@@ -11,15 +11,15 @@ Two equivalent ways to install — pick one.
 
 **As an editable package (recommended if you'll import `wcf_biofilm` elsewhere):**
 ```bash
-git clone https://github.com/Tinonturja/wcf-biofilm-adsorption.git
-cd wcf-biofilm-adsorption
+git clone https://github.com/Tinonturja/wcf_biofilm_adsorption.git
+cd wcf_biofilm_adsorption
 pip install -e .
 ```
 
 **Pinned, reproducible environment (exact versions used to generate every figure and result):**
 ```bash
-git clone https://github.com/Tinonturja/wcf-biofilm-adsorption.git
-cd wcf-biofilm-adsorption
+git clone https://github.com/Tinonturja/wcf_biofilm_adsorption.git
+cd wcf_biofilm_adsorption
 python -m venv venv
 source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
