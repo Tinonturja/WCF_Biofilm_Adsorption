@@ -24,7 +24,7 @@ dependencies = [
 ]
 
 [project.urls]
-Repository = "https://github.com/<your-username>/wcf-biofilm-adsorption"
+Repository = "https://github.com/Tinonturja/wcf_biofilm_adsorption"
 
 [build-system]
 requires = ["setuptools>=68.0"]
