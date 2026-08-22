@@ -1,9 +1,24 @@
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.21952872.svg)](https://doi.org/10.5281/zenodo.21952872)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
+
 # WCF Biofilm Adsorption — Modeling Code
 
 Code accompanying: *"Interfacial Mechanisms of Reactive Dye Adsorption on a
 Waste-Cotton Derived PVA/TiO2/Cellulose Biofilm: A Molecular Dynamics and
 Physics-Informed Predictive Framework"* (submitted to *Journal of
 Environmental Chemical Engineering*).
+
+Full derivation, experimental conditions and model comparison are in the
+accompanying paper.
+
+## Key results
+
+| Quantity | Value |
+| :--- | :--- |
+| PINN-recovered equilibrium capacity, `q_e` | 0.986 mg/g |
+| PINN-recovered rate constant, `k_2` | 0.0201 g·mg⁻¹·min⁻¹ |
 
 ## Installation
 
