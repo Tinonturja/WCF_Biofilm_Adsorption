@@ -1,0 +1,59 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite both the software (Zenodo DOI) and the accompanying paper."
+title: "WCF Biofilm Adsorption: molecular-dynamics-informed and physics-informed modelling of reactive dye adsorption on a waste-cotton PVA/TiO2/cellulose biofilm"
+abstract: >-
+  Code accompanying a study of Avitera Light Red SE adsorption on a
+  waste-cotton derived PVA/TiO2/cellulose biofilm, combining wet-lab
+  characterisation, classical kinetics and isotherm fitting, all-atom molecular
+  dynamics, and a physics-informed neural network.
+type: software
+license: MIT
+version: "1.0.0"
+doi: "10.5281/zenodo.21952872"
+repository-code: "https://github.com/Tinonturja/WCF_Biofilm_Adsorption"
+keywords:
+  - adsorption
+  - physics-informed neural networks
+  - molecular dynamics
+  - scientific machine learning
+  - reactive dye
+  - waste cotton
+authors:
+  - family-names: Faisal
+    given-names: Md Shajjad Khan
+  - family-names: Majumder
+    given-names: Tinon Turja
+    affiliation: "United International University"
+    # orcid: "https://orcid.org/0000-0000-0000-0000"   # register at orcid.org
+  - family-names: Islam
+    given-names: Kazi Sirajul
+  - family-names: Mainuddin
+    given-names: Sk.
+  - family-names: Hossain
+    given-names: Mohammad Forhad
+  - family-names: Sultana
+    given-names: Niger
+  - family-names: Hasan
+    given-names: Mahmudul
+
+preferred-citation:
+  type: article
+  title: "Interfacial Mechanisms of Reactive Dye Adsorption on a Waste-Cotton Derived PVA/TiO2/Cellulose Biofilm: A Molecular Dynamics and Physics-Informed Predictive Framework"
+  journal: "Journal of Environmental Chemical Engineering"
+  year: 2026
+  status: submitted
+  authors:
+    - family-names: Faisal
+      given-names: Md Shajjad Khan
+    - family-names: Majumder
+      given-names: Tinon Turja
+    - family-names: Islam
+      given-names: Kazi Sirajul
+    - family-names: Mainuddin
+      given-names: Sk.
+    - family-names: Hossain
+      given-names: Mohammad Forhad
+    - family-names: Sultana
+      given-names: Niger
+    - family-names: Hasan
+      given-names: Mahmudul
