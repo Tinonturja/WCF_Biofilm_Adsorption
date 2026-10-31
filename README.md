@@ -96,7 +96,7 @@ verified plateau, so they are q(170 min) rather than equilibrium q_e.
 
 1. **PINN loss scaling (both PINNs).** In the submitted code the data term was on
    standardised q and the PSO residual in raw units (mg g⁻¹ min⁻¹), so the physics term
-   carried roughly 1/3,000 (1-D) to 1/5,000 (3-input) of its nominal weight; an ablation shows the submitted 1-D PINN
+   carried about 1/530,000 (1-D) and 1/40,000 (3-input) of its nominal weight; an ablation shows the submitted 1-D PINN
    gives the same predictions with the physics term switched off. The corrected
    formulation (`scaling="nondim"`, now the default) divides every residual by its
    natural scale (q/Q, dq/dt·T/Q), imposes q(0) = 0 exactly, ramps the physics weight

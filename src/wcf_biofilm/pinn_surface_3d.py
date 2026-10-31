@@ -36,7 +36,8 @@ class SurfacePINN(nn.Module):
                  scaling="nondim", ckpt_path=None, t_scale=200.0):
         super().__init__()
         # scaling="raw"   : loss terms in physical units, as in the original submission
-        #                   (physics terms effectively ~5e3x under-weighted vs. the data term).
+        #                   (the rate-law residual is effectively weighted 1/T^2 ~ 1/40,000
+        #                   relative to the data term).
         # scaling="nondim": every residual divided by its natural scale (q by Q = max q,
         #                   dq/dt by Q/T) so that the lam_* weights are true relative weights.
         if scaling not in ("raw", "nondim"):

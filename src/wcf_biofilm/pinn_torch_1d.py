@@ -5,9 +5,9 @@ Two loss formulations are available:
 
 scaling="raw"   The formulation used in the original submission. The data term is
                 computed on standardised q, the PSO residual in raw units
-                (mg g^-1 min^-1). Because the residual is ~(Q/T) ~ 4e-3 in size while
-                the data term is O(1), the physics term carries an effective weight of
-                roughly (T/Q)^2 / (1/y_std)^2 ~ 3e3 times less than its nominal lambda.
+                (mg g^-1 min^-1). On a common dimensionless scale the physics term's
+                effective weight is lambda * s_q^2 / T^2 (s_q = 0.247 mg/g, T = 180 min),
+                i.e. ~1.9e-6 for lambda = 1: the rate law barely constrains the network.
                 Kept so that the submitted numbers remain reproducible.
 
 scaling="nondim" (default) Both terms are non-dimensionalised with the same scales,
