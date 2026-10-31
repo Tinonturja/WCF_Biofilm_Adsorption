@@ -1,0 +1,25 @@
+============================================================
+CLASSICAL PSEUDO-SECOND-ORDER FIT — WCF kinetics arm (n=9)
+============================================================
+
+(A) Non-linear least squares on q(t) = qe^2 k2 t / (1 + qe k2 t)
+    qe = 0.93601 +/- 0.01731 mg/g
+    k2 = 0.02521 +/- 0.00177 g mg^-1 min^-1
+    R2 = 0.9983,  MAE = 0.00807 mg/g
+
+(B) Ho & McKay linear form  t/q = 1/(k2 qe^2) + t/qe
+    qe = 0.93775 mg/g
+    k2 = 0.02478 g mg^-1 min^-1
+    R2 (linearised) = 0.9976
+
+Saved -> /sessions/rcw-01pc7fcyqjkftmvnt5db9jxb/final/results/wcf_pso_classical_fit.csv
+
+Use the non-linear qe, k2 above as the sourced classical PSO constants.
+
+============================================================
+SANITY CHECK — fitted qe vs. last raw data point
+============================================================
+  last MEASURED qt at t=170 min : 0.73692 mg/g
+  FITTED asymptotic qe (non-lin): 0.93601 mg/g
+  fitted qe is 27.02% above the last measurement
+  last measurement is 21.27% below the fitted qe

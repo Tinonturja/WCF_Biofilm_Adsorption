@@ -8,7 +8,7 @@ abstract: >-
   dynamics, and a physics-informed neural network.
 type: software
 license: MIT
-version: "1.0.0"
+version: "1.1.0"
 doi: "10.5281/zenodo.21952872"
 repository-code: "https://github.com/Tinonturja/WCF_Biofilm_Adsorption"
 keywords:
@@ -24,7 +24,7 @@ authors:
   - family-names: Majumder
     given-names: Tinon Turja
     affiliation: "United International University"
-    # orcid: "https://orcid.org/0000-0000-0000-0000"   # register at orcid.org
+    orcid: "https://orcid.org/0009-0000-0684-398X"
   - family-names: Islam
     given-names: Kazi Sirajul
   - family-names: Mainuddin
@@ -39,9 +39,9 @@ authors:
 preferred-citation:
   type: article
   title: "Interfacial Mechanisms of Reactive Dye Adsorption on a Waste-Cotton Derived PVA/TiO2/Cellulose Biofilm: A Molecular Dynamics and Physics-Informed Predictive Framework"
-  journal: "Journal of Environmental Chemical Engineering"
+  journal: "Chemical Engineering Journal Advances"
   year: 2026
-  status: submitted
+  status: in-review
   authors:
     - family-names: Faisal
       given-names: Md Shajjad Khan

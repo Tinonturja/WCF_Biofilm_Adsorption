@@ -25,9 +25,7 @@ rng = np.random.default_rng(42)
 # ------------------------------------------------------------------
 # REAL WCF DATA
 # ------------------------------------------------------------------
-t   = np.array([0, 10, 20, 30, 50, 80, 110, 140, 170], dtype=float)   # min
-qt  = np.array([0.0, 0.16306, 0.31258, 0.39029, 0.4958,
-                0.61295, 0.6918, 0.72048, 0.73692])                    # mg/g
+from .data import t_kin as t, q_kin as qt   # single data source
 
 # ==================================================================
 # 1. PHYSICS-INFORMED NEURAL NETWORK (PINN) - PyTorch Integration
@@ -38,6 +36,23 @@ class PSO_PINN(PyTorch_PSO_PINN):
     def predict(self, t_list):
         preds_list = super().predict(t_list)
         return np.array(preds_list).ravel()
+
+
+from scipy.optimize import curve_fit
+from .classical import pso, pfo
+
+
+class ClassicalKinetic:
+    """2-parameter integrated rate law, fitted by non-linear least squares (raw t)."""
+    def __init__(self, f, p0):
+        self.f, self.p0 = f, p0
+
+    def fit(self, x, y):
+        self.p_, _ = curve_fit(self.f, np.ravel(x), y, p0=self.p0, maxfev=100000)
+        return self
+
+    def predict(self, x):
+        return self.f(np.ravel(x), *self.p_)
 
 # ==================================================================
 # 2. MODEL FACTORY + LOO EVALUATION
@@ -54,12 +69,20 @@ MODELS = {
     'Polynomial (deg 3)':    lambda: Pipeline([('p', PolynomialFeatures(3)), ('l', LinearRegression())]),
     'Random Forest':         lambda: RandomForestRegressor(n_estimators=100, random_state=42),
     'XGBoost':               lambda: XGBRegressor(n_estimators=100, max_depth=3, random_state=42, verbosity=0),
-    'PINN (PSO-constrained)':lambda: PSO_PINN(n_hidden=16, lam=1.0, lr=2e-3, epochs=8000, seed=0),
+    # as submitted: physics residual in raw units (effectively ~1e-3 of its nominal weight)
+    'PINN (PSO, as submitted)': lambda: PSO_PINN(n_hidden=16, lam=1.0, lr=2e-3, epochs=8000,
+                                                 seed=0, scaling="raw"),
+    # corrected: non-dimensionalised residuals, hard q(0)=0, lambda ramp + L-BFGS
+    'PINN (PSO-constrained)': lambda: PSO_PINN(n_hidden=16, lam=1.0, lr=2e-3, epochs=8000,
+                                               seed=0, scaling="nondim"),
+    'PSO (classical)':  lambda: ClassicalKinetic(pso, (0.9, 0.02)),
+    'PFO (classical)':  lambda: ClassicalKinetic(pfo, (0.75, 0.02)),
 }
+RAW_INPUT = ('PINN', 'PSO (classical)', 'PFO (classical)')   # models fitted on raw time
 
 def train_score(model_name, x, y):
     m = MODELS[model_name]()
-    if model_name.startswith('PINN'):
+    if model_name.startswith(RAW_INPUT):
         m.fit(x, y); return r2_score(y, m.predict(x)), m
     s = StandardScaler(); X = s.fit_transform(x.reshape(-1, 1))
     m.fit(X, y); return r2_score(y, m.predict(X)), (m, s)
@@ -69,7 +92,7 @@ def loo_scores(model_name, x, y):
     preds = np.zeros_like(y, dtype=float)
     for tr, te in loo.split(x):
         m = MODELS[model_name]()
-        if model_name.startswith('PINN'):
+        if model_name.startswith(RAW_INPUT):
             m.fit(x[tr], y[tr])
             preds[te] = m.predict(x[te])
         else:

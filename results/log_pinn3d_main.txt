@@ -1,0 +1,34 @@
+====================================================================
+3-INPUT PHYSICS-INFORMED NEURAL NETWORK  q(t, C0, V/m)
+====================================================================
+  resumed from epoch 15000
+
+training time this invocation: 0.5s
+
+--- RECOVERED PHYSICAL CONSTANTS ---
+  k2  = 0.01193 g mg^-1 min^-1   (classical refit: 0.02521)
+  Kf  = 0.03697                  (classical refit: 0.01240)
+  n   = 0.7291  (1/n = 1.3715)  (classical refit n: 0.632)
+
+--- IN-SAMPLE FIT (training data; see revision/ for LOO-CV) ---
+  kinetics arm (n=9, V/m=0.04167): R2 = 0.9826, MAE = 0.02550
+  isotherm arm (n=5, V/m=0.10000): R2 = 0.9913, MAE = 0.06319
+  all 14 points               : R2 = 0.9960
+
+     t    C0      V/m    actual      PINN
+     0    40  0.04167   0.00000   0.02039
+    10    40  0.04167   0.16306   0.15740
+    20    40  0.04167   0.31258   0.26432
+    30    40  0.04167   0.39029   0.35043
+    50    40  0.04167   0.49580   0.48013
+    80    40  0.04167   0.61295   0.60895
+   110    40  0.04167   0.69180   0.69368
+   140    40  0.04167   0.72048   0.75141
+   170    40  0.04167   0.73692   0.79976
+   170    20  0.10000   0.68856   0.63315
+   170    30  0.10000   1.16535   1.14851
+   170    40  0.10000   1.67641   1.71562
+   170    50  0.10000   2.43122   2.30526
+   170    60  0.10000   2.82825   2.90677
+
+Saved -> /sessions/rcw-01pc7fcyqjkftmvnt5db9jxb/final/results/pinn_surface_results.npz  (input for 5_visualize_pinn.py)

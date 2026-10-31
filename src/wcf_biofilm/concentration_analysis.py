@@ -28,10 +28,8 @@ PAL = {"data": "#2b2b2b", "gpr": "#3d6b7d", "poly": "#a6772f",
        "rf": "#7a8b5a", "frnd": "#b5613f", "band": "#c9d5da", "grid": "#e7e7e2"}
 
 # ---------------- REAL WCF DATA (data_of_biofilm.xlsx) ----------------
-Co      = np.array([20.0, 30.0, 40.0, 50.0, 60.0])          # initial conc, ppm
-Ce      = np.array([13.11445, 18.3465, 23.23591, 25.68784, 31.71751])  # mg/L
-qe      = np.array([0.68856, 1.16535, 1.67641, 2.43122, 2.82825])      # mg/g
-removal = np.array([34.42776, 38.845, 41.91021, 48.62431, 47.13748])   # %
+from .data import C0_iso as Co, Ce_iso as Ce, q_iso as qe, removal_iso as removal
+# NOTE: q here is uptake at t = 170 min (not a verified equilibrium value)
 
 Kf_TABLE6, n_TABLE6 = 0.0093, 0.598   # manuscript Table 6
 

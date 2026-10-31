@@ -1,0 +1,37 @@
+
+== kinetics
+  PSO                              train R2=0.9983  LOO R2=0.9969  LOO MAE=0.0109  extrap MAE=0.0183  AICc=-76.51  params=[0.93601, 0.02521]
+  PFO                              train R2=0.9964  LOO R2=0.9935  LOO MAE=0.0155  extrap MAE=0.0264  AICc=-69.73  params=[0.73986, 0.02421]
+  GPR (Matern 5/2)                 train R2=0.9997  LOO R2=0.9656  LOO MAE=0.0284  extrap MAE=0.0789
+  Polynomial (deg 2)               train R2=0.9734  LOO R2=0.9057  LOO MAE=0.0613  extrap MAE=0.2535
+  Polynomial (deg 3)               train R2=0.9933  LOO R2=0.9447  LOO MAE=0.0445  extrap MAE=0.4652
+  Random forest (50 trees)         train R2=0.9730  LOO R2=0.8521  LOO MAE=0.0767  extrap MAE=0.0763
+  Random forest (100 trees)        train R2=0.9728  LOO R2=0.8498  LOO MAE=0.0750  extrap MAE=0.0738
+  Random forest (500 trees)        train R2=0.9796  LOO R2=0.8476  LOO MAE=0.0760  extrap MAE=0.0757
+  XGBoost (100 rounds, depth 3)    train R2=1.0000  LOO R2=0.7929  LOO MAE=0.1001  extrap MAE=0.0380
+
+== isotherm_qe_vs_Ce
+  Freundlich                       train R2=0.9551  LOO R2=0.7807  LOO MAE=0.2868  AICc=-7.90  params=[0.0124, 0.63204]
+  Langmuir                         train R2=0.8471  LOO R2=0.7658  LOO MAE=0.3769  AICc=-1.78  params=[9999.99998, 1e-05]
+  GPR (Matern 5/2)                 train R2=0.9771  LOO R2=0.4825  LOO MAE=0.5031
+  Polynomial (deg 2)               train R2=0.9595  LOO R2=0.2786  LOO MAE=0.5460
+  Random forest (100 trees, depth 2) train R2=0.9510  LOO R2=0.5363  LOO MAE=0.5151
+
+== removal_vs_C0
+  GPR (Matern 5/2)                 train R2=0.9699  LOO R2=0.3474  LOO MAE=3.9650
+  Polynomial (deg 2)               train R2=0.9363  LOO R2=0.2520  LOO MAE=3.8305
+  Random forest (100 trees, depth 2) train R2=0.9448  LOO R2=0.4996  LOO MAE=2.7267
+
+linearised: {
+"PSO_HoMcKay": {
+"qe": 0.9377521454807196,
+"k2": 0.02478439493240212,
+"R2_linear": 0.9975517988309904
+},
+"Freundlich_lnln": {
+"Kf": 0.009259810724378731,
+"n": 0.5980799356829879,
+"R2_linear": 0.9782632591629197
+}
+}
+gap: {'q170': 0.73692, 'qe_fit': 0.9360062686526558, 'measured_below_fit_pct': np.float64(21.269758047585796), 'fit_above_measured_pct': np.float64(27.01599476912769)}

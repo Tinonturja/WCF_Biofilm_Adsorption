@@ -1,0 +1,31 @@
+Starting Model Evaluation... (This will take a moment)
+Evaluating GPR (Matérn 5/2)...
+Evaluating Polynomial (deg 2)...
+Evaluating Polynomial (deg 3)...
+Evaluating Random Forest...
+Evaluating XGBoost...
+Evaluating PINN (PSO, as submitted)...
+Evaluating PINN (PSO-constrained)...
+Evaluating PSO (classical)...
+Evaluating PFO (classical)...
+
+=== WCF kinetics — model comparison (LOO-CV) ===
+                   Model  Train_R2  LOO_R2  LOO_MAE
+        GPR (Matérn 5/2)    0.9997  0.9656   0.0284
+      Polynomial (deg 2)    0.9734  0.9057   0.0613
+      Polynomial (deg 3)    0.9933  0.9447   0.0445
+           Random Forest    0.9728  0.8498   0.0750
+                 XGBoost    1.0000  0.7929   0.1001
+PINN (PSO, as submitted)    0.9999  0.9885   0.0206
+  PINN (PSO-constrained)    0.9983  0.9969   0.0108
+         PSO (classical)    0.9983  0.9969   0.0109
+         PFO (classical)    0.9964  0.9935   0.0155
+
+PINN recovered physics parameters: qe = 0.9360 mg/g, k2 = 0.02521 g/mg/min
+Plotting Image Started
+Setting the Parameters
+Figure 1 done
+Figure 2 Done
+figure 3 done
+
+Saved figures: wcf_fig_model_comparison.png, wcf_fig_train_vs_loo.png, wcf_fig_gpr_uncertainty.png

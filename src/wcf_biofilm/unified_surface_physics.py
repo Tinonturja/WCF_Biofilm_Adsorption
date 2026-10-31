@@ -21,15 +21,13 @@ PAL = {"gpr": "#3d6b7d", "frnd": "#b5613f", "kin": "#a6772f",
 # REAL DATA
 # ==================================================================
 # Kinetics arm: m = 1.2 g, V = 0.05 L, C0 = 40 ppm
-t_kin  = np.array([0, 10, 20, 30, 50, 80, 110, 140, 170], dtype=float)
-qt_kin = np.array([0.0, 0.16306, 0.31258, 0.39029, 0.4958,
-                    0.61295, 0.6918, 0.72048, 0.73692])
-C0_kin, dosage_kin = 40.0, 24.0  # g/L
+from .data import t_kin, q_kin as qt_kin, C0_KIN as C0_kin, DOSE_KIN as dosage_kin
 
 # Isotherm arm: m = 0.5 g, V = 0.05 L, t = 170 min (equilibrium)
-Co_iso = np.array([20, 30, 40, 50, 60], dtype=float)
-qe_iso = np.array([0.68856, 1.16535, 1.67641, 2.43122, 2.82825])
-dosage_iso = 10.0  # g/L
+from .data import C0_iso as Co_iso, q_iso as qe_iso, DOSE_ISO as dosage_iso
+# NOTE: isotherm-arm uptakes were measured at t = 170 min and are treated here as
+# equilibrium values (the "sequential" route). revision/unified_surface_analysis.py
+# compares this with a joint fit that models them as q(170 min).
 
 # ==================================================================
 # MODEL PARAMETERS (from our refits on real data)
@@ -83,7 +81,7 @@ def predict_q(t, C0, dosage, Kf=Kf, n=n_f, k2=k2):
 # VALIDATION: predict both arms from the unified model
 # ==================================================================
 print("=" * 65)
-print("UNIFIED MODEL VALIDATION")
+print("UNIFIED MODEL: IN-SAMPLE FIT (Kf, n from isotherm arm; k2 from kinetics arm)")
 print("=" * 65)
 
 # --- Kinetics arm ---
@@ -128,7 +126,7 @@ a1.plot(t_f, predict_q(t_f, C0_kin, dosage_kin), color=PAL["gpr"], lw=2,
 a1.scatter(t_kin, qt_kin, color=PAL["data"], s=50, zorder=6,
            edgecolors="white", lw=0.9, label="Kinetics data (24 g/L)")
 a1.set_xlabel("Contact time (min)"); a1.set_ylabel("$q_t$ (mg g$^{-1}$)")
-a1.set_title("Kinetics arm validation", fontsize=11)
+a1.set_title("Kinetics arm (in-sample)", fontsize=11)
 for sp in ["top", "right"]: a1.spines[sp].set_visible(False)
 a1.legend(fontsize=9, frameon=False)
 
@@ -142,7 +140,7 @@ a2.scatter(Co_iso, qe_iso, color=PAL["data"], s=50, zorder=6,
            edgecolors="white", lw=0.9, label="Isotherm data (10 g/L)")
 a2.set_xlabel("Initial concentration $C_0$ (ppm)")
 a2.set_ylabel("$q_e$ (mg g$^{-1}$)")
-a2.set_title("Isotherm arm validation", fontsize=11)
+a2.set_title("Isotherm arm (in-sample)", fontsize=11)
 for sp in ["top", "right"]: a2.spines[sp].set_visible(False)
 a2.legend(fontsize=9, frameon=False)
 

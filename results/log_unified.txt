@@ -1,0 +1,18 @@
+
+== sequential
+  params {'Kf': np.float64(0.0124), 'n': np.float64(0.63204), 'one_over_n': np.float64(1.58218), 'k2': np.float64(0.02521)}
+  in-sample {'R2_all': np.float64(0.9948), 'R2_kin': np.float64(0.9622), 'R2_iso': np.float64(0.9915), 'MAE_all': 0.0491, 'MAE_kin': 0.0433, 'MAE_iso': 0.0595}
+  LOO       {'R2_all': np.float64(0.9878), 'R2_kin': np.float64(0.9621), 'R2_iso': np.float64(0.9709), 'MAE_all': 0.0675, 'MAE_kin': 0.0428, 'MAE_iso': 0.112}
+  test      {'t60_C30_10gL': 0.7743, 't170_C40_5gL': 2.1973, 't60_C40_24gL': 0.6013, 'qe_C40_24gL': 0.9991}
+  boot CI   {'Kf_CI': [0.0036, 0.0372], 'n_CI': [0.5085, 0.7963], 'k2_CI': [0.0169, 0.0274]}
+  test CI   {'t60_C30_10gL': [0.6332, 0.8327], 't170_C40_5gL': [2.0584, 2.3014], 't60_C40_24gL': [0.4926, 0.6386], 'qe_C40_24gL': [0.9571, 1.0608]}
+  corr(logKf,logn,logk2) [[1.0, 0.997, 0.033], [0.997, 1.0, 0.028], [0.033, 0.028, 1.0]]
+
+== joint
+  params {'Kf': np.float64(0.05309), 'n': np.float64(0.79293), 'one_over_n': np.float64(1.26115), 'k2': np.float64(0.01164)}
+  in-sample {'R2_all': np.float64(0.9953), 'R2_kin': np.float64(0.9681), 'R2_iso': np.float64(0.9919), 'MAE_all': 0.0422, 'MAE_kin': 0.0342, 'MAE_iso': 0.0567}
+  LOO       {'R2_all': np.float64(0.9881), 'R2_kin': np.float64(0.9586), 'R2_iso': np.float64(0.9724), 'MAE_all': 0.0625, 'MAE_kin': 0.0393, 'MAE_iso': 0.1041}
+  test      {'t60_C30_10gL': 0.8049, 't170_C40_5gL': 2.6095, 't60_C40_24gL': 0.5328, 'qe_C40_24gL': 1.1795}
+  boot CI   {'Kf_CI': [0.019, 0.1673], 'n_CI': [0.6277, 1.0678], 'k2_CI': [0.008, 0.0146]}
+  test CI   {'t60_C30_10gL': [0.7607, 0.8512], 't170_C40_5gL': [2.5141, 2.7702], 't60_C40_24gL': [0.4848, 0.563], 'qe_C40_24gL': [1.115, 1.2975]}
+  corr(logKf,logn,logk2) [[1.0, 0.993, -0.828], [0.993, 1.0, -0.787], [-0.828, -0.787, 1.0]]

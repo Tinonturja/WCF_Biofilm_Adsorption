@@ -40,18 +40,14 @@ jobs:
           python -m pip install --upgrade pip
         
 
-      - name: Install package
-        run: pip install -e .
+      - name: Install package (CPU torch)
+        run: |
+          pip install torch==2.6.0 --index-url https://download.pytorch.org/whl/cpu
+          pip install -e ".[test]"
 
       - name: Verify the package imports
         run: |
           python -c "import wcf_biofilm; print('package imports cleanly')"
 
-      - name: Run tests if any exist
-        run: |
-          if [ -d tests ]; then
-            pip install pytest
-            pytest -v
-          else
-            echo "No tests/ directory yet. Skipping."
-          fi
+      - name: Reproduce manuscript numbers (regression tests)
+        run: pytest -v tests

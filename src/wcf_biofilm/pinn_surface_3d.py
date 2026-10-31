@@ -12,17 +12,11 @@ torch.set_num_threads(4)
 # ======================================================================
 # REAL WCF DATA
 # ======================================================================
-VM_KIN = 0.05 / 1.2
-VM_ISO = 0.05 / 0.5
-
-t_kin  = np.array([0, 10, 20, 30, 50, 80, 110, 140, 170], dtype=float)
-q_kin  = np.array([0.0, 0.16306, 0.31258, 0.39029, 0.4958,
-                   0.61295, 0.6918, 0.72048, 0.73692])
+from .data import VM_KIN, VM_ISO, t_kin, q_kin, C0_iso, q_iso
 c_kin  = np.full_like(t_kin, 40.0)
 vm_kin = np.full_like(t_kin, VM_KIN)
 
-c_iso  = np.array([20, 30, 40, 50, 60], dtype=float)
-q_iso  = np.array([0.68856, 1.16535, 1.67641, 2.43122, 2.82825])
+c_iso  = C0_iso
 t_iso  = np.full_like(c_iso, 170.0)
 vm_iso = np.full_like(c_iso, VM_ISO)
 
@@ -38,8 +32,16 @@ Q_ALL  = np.concatenate([q_kin,  q_iso])
 class SurfacePINN(nn.Module):
     def __init__(self, n_hidden=32, n_layers=3,
                  lam_pso=1.0, lam_iso=1.0, lam_ic=1.0,
-                 lr=3e-3, epochs=15000, n_coll=12, seed=0):
+                 lr=3e-3, epochs=15000, n_coll=12, seed=0,
+                 scaling="nondim", ckpt_path=None, t_scale=200.0):
         super().__init__()
+        # scaling="raw"   : loss terms in physical units, as in the original submission
+        #                   (physics terms effectively ~5e3x under-weighted vs. the data term).
+        # scaling="nondim": every residual divided by its natural scale (q by Q = max q,
+        #                   dq/dt by Q/T) so that the lam_* weights are true relative weights.
+        if scaling not in ("raw", "nondim"):
+            raise ValueError("scaling must be 'raw' or 'nondim'")
+        self.scaling, self.ckpt_path, self.T_scale = scaling, ckpt_path, float(t_scale)
         torch.manual_seed(seed)
         self.lam_pso, self.lam_iso, self.lam_ic = lam_pso, lam_iso, lam_ic
         self.lr, self.epochs, self.n_coll = lr, epochs, n_coll
@@ -66,6 +68,7 @@ class SurfacePINN(nn.Module):
         self.c_m, self.c_s = c.mean(), c.std().clamp_min(1e-8)
         self.v_m, self.v_s = vm.mean(), vm.std().clamp_min(1e-8)
         self.q_m, self.q_s = q.mean(), q.std().clamp_min(1e-8)
+        self.Q_scale = float(q.abs().max())
 
     def _forward_real(self, t, c, vm):
         x = torch.cat([(t - self.t_m) / self.t_s,
@@ -116,7 +119,11 @@ class SurfacePINN(nn.Module):
         hist = []
         start_ep = 0
 
-        ckpt_path = os.path.join(RES_DIR, "pinn_surface.ckpt")
+        ckpt_path = self.ckpt_path or os.path.join(RES_DIR, "pinn_surface.ckpt")
+        if self.scaling == "nondim":
+            sq, sd = 1.0 / self.Q_scale, self.T_scale / self.Q_scale
+        else:
+            sq, sd = 1.0, 1.0
         if getattr(self, "resume", True) and os.path.exists(ckpt_path):
             ck = torch.load(ckpt_path, weights_only=False)
             self.load_state_dict(ck["model"])
@@ -135,22 +142,22 @@ class SurfacePINN(nn.Module):
             opt.zero_grad()
 
             # --- 1. DATA ---
-            loss_data = ((self._forward_real(t, c, vm) - q) ** 2).mean()
+            loss_data = (((self._forward_real(t, c, vm) - q) * sq) ** 2).mean()
 
             # --- 2. PSO RESIDUAL ---
             tc_req = tc.clone().requires_grad_(True)
             q_c = self._forward_real(tc_req, cc, vc)
             dq_dt = torch.autograd.grad(q_c.sum(), tc_req, create_graph=True)[0]
             qe_c = self.qe_implicit(cc, vc)
-            loss_pso = ((dq_dt - self.k2 * (qe_c - q_c) ** 2) ** 2).mean()
+            loss_pso = (((dq_dt - self.k2 * (qe_c - q_c) ** 2) * sd) ** 2).mean()
 
             # --- 3. EQUILIBRIUM CONSISTENCY ---
             q_eq = self._forward_real(t_eq, cc, vc)
             Ce_eq = torch.clamp(cc - q_eq / vc, min=1e-8)
-            loss_iso = ((q_eq - self.Kf * Ce_eq.pow(self.n_inv)) ** 2).mean()
+            loss_iso = (((q_eq - self.Kf * Ce_eq.pow(self.n_inv)) * sq) ** 2).mean()
 
             # --- 4. INITIAL CONDITION q(0)=0 ---
-            loss_ic = (self._forward_real(t_zero, cc, vc) ** 2).mean()
+            loss_ic = ((self._forward_real(t_zero, cc, vc) * sq) ** 2).mean()
 
             # ==================================================================
             # DYNAMIC LOSS ANNEALING (Linear Warmup)
@@ -227,7 +234,8 @@ if __name__ == "__main__":
     # IMPORTANT: Delete the old checkpoint before running so the model trains from scratch 
     # with the new annealing schedule.
     ckpt_path = os.path.join(RES_DIR, "pinn_surface.ckpt")
-    if os.path.exists(ckpt_path):
+    # with WCF_WALL_BUDGET set, an existing checkpoint is resumed instead of deleted
+    if os.path.exists(ckpt_path) and not os.environ.get("WCF_WALL_BUDGET"):
         os.remove(ckpt_path)
         print("Deleted old checkpoint to enforce fresh training run with loss annealing.")
         
@@ -246,10 +254,10 @@ if __name__ == "__main__":
     print(f"  Kf  = {model.Kf_:.5f}                  (classical refit: 0.01240)")
     print(f"  n   = {model.n_:.4f}  (1/n = {model.n_inv_:.4f})  (classical refit n: 0.632)")
 
-    # ---- validation on each arm ----
+    # ---- in-sample fit on each arm (all 14 points were used in training) ----
     p_kin = model.predict(t_kin, c_kin, vm_kin)
     p_iso = model.predict(t_iso, c_iso, vm_iso)
-    print("\n--- VALIDATION ---")
+    print("\n--- IN-SAMPLE FIT (training data; see revision/ for LOO-CV) ---")
     print(f"  kinetics arm (n=9, V/m={VM_KIN:.5f}): "
           f"R2 = {r2(q_kin, p_kin):.4f}, MAE = {mae(q_kin, p_kin):.5f}")
     print(f"  isotherm arm (n=5, V/m={VM_ISO:.5f}): "

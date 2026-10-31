@@ -74,7 +74,7 @@ a2.set_ylabel("$q_e$ (mg g$^{-1}$)")
 a2.set_title("(b) Isotherm arm", fontsize=11)
 a2.legend(fontsize=8.5, frameon=False)
 
-fig.suptitle("PINN surface validated against both experimental arms",
+fig.suptitle("PINN surface: in-sample fit to both experimental arms",
              fontsize=12.5, y=1.00)
 fig.tight_layout()
 save(fig, "fig_pinn_validation")

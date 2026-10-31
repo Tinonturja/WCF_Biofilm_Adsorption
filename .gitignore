@@ -9,3 +9,9 @@ wheels/
 vendor/
 *.egg-info/
 .ipynb_checkpoints/
+# model checkpoints and per-job outputs (regenerable)
+*.ckpt
+revision/ckpt3d/
+revision/res*.jsonl
+revision/*.tmp
+.pytest_cache/

@@ -6,9 +6,7 @@ from sklearn.metrics import r2_score, mean_absolute_error
 from .wcf_common import RES_DIR
 
 # ---------------- REAL WCF kinetics data (data_of_biofilm.xlsx) --------------
-t  = np.array([0, 10, 20, 30, 50, 80, 110, 140, 170], dtype=float)   # min
-qt = np.array([0.0, 0.16306, 0.31258, 0.39029, 0.4958,
-               0.61295, 0.6918, 0.72048, 0.73692])                   # mg/g
+from .data import t_kin as t, q_kin as qt   # single data source: data/wcf_adsorption_data.csv
 
 
 # ---------------- (A) non-linear PSO fit -------------------------------------
@@ -62,10 +60,12 @@ print(f"\nSaved -> {out}")
 print("\nUse the non-linear qe, k2 above as the sourced classical PSO constants.")
 # ---------------- sanity check: fitted qe vs last observed point -----------
 last_measured = qt[-1]
-gap_pct = (qe_nl - last_measured) / last_measured * 100
+gap_pct = (qe_nl - last_measured) / last_measured * 100          # fit ABOVE measurement
+below_pct = (qe_nl - last_measured) / qe_nl * 100                # measurement BELOW fit
 print("\n" + "=" * 60)
 print("SANITY CHECK — fitted qe vs. last raw data point")
 print("=" * 60)
 print(f"  last MEASURED qt at t=170 min : {last_measured:.5f} mg/g")
 print(f"  FITTED asymptotic qe (non-lin): {qe_nl:.5f} mg/g")
-print(f"  gap                           : {gap_pct:.2f}%")
+print(f"  fitted qe is {gap_pct:.2f}% above the last measurement")
+print(f"  last measurement is {below_pct:.2f}% below the fitted qe")

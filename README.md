@@ -7,18 +7,21 @@
 
 Code accompanying: *"Interfacial Mechanisms of Reactive Dye Adsorption on a
 Waste-Cotton Derived PVA/TiO2/Cellulose Biofilm: A Molecular Dynamics and
-Physics-Informed Predictive Framework"* (submitted to *Journal of
-Environmental Chemical Engineering*).
+Physics-Informed Predictive Framework"* (under review at *Chemical Engineering Journal Advances*, manuscript CEJA-D-26-01907).
 
 Full derivation, experimental conditions and model comparison are in the
 accompanying paper.
 
 ## Key results
 
-| Quantity | Value |
+| Quantity (kinetics arm, n = 9) | Value |
 | :--- | :--- |
-| PINN-recovered equilibrium capacity, `q_e` | 0.986 mg/g |
-| PINN-recovered rate constant, `k_2` | 0.0201 g·mg⁻¹·min⁻¹ |
+| PSO, non-linear least squares: `q_e`, `k_2` | 0.936 ± 0.017 mg/g, 0.0252 ± 0.0018 g·mg⁻¹·min⁻¹ |
+| PSO leave-one-out R² / MAE | 0.9969 / 0.0109 mg/g |
+| PSO-constrained PINN (corrected, λ = 1, 5 seeds): `q_e`, `k_2` | 0.9361 ± 0.0001 mg/g, 0.02520 ± 0.00001 g·mg⁻¹·min⁻¹ |
+| PSO-constrained PINN leave-one-out R² / MAE | 0.9969 / 0.0109 mg/g |
+
+See **Revision (v1.1)** below for what changed relative to the submitted version.
 
 ## Installation
 
@@ -26,15 +29,15 @@ Two equivalent ways to install — pick one.
 
 **As an editable package (recommended if you'll import `wcf_biofilm` elsewhere):**
 ```bash
-git clone https://github.com/Tinonturja/wcf_biofilm_adsorption.git
-cd wcf_biofilm_adsorption
+git clone https://github.com/Tinonturja/WCF_Biofilm_Adsorption.git
+cd WCF_Biofilm_Adsorption
 pip install -e .
 ```
 
 **Pinned, reproducible environment (exact versions used to generate every figure and result):**
 ```bash
-git clone https://github.com/Tinonturja/wcf_biofilm_adsorption.git
-cd wcf_biofilm_adsorption
+git clone https://github.com/Tinonturja/WCF_Biofilm_Adsorption.git
+cd WCF_Biofilm_Adsorption
 python -m venv venv
 source venv/bin/activate        # Windows: venv\Scripts\activate
 pip install -r requirements.txt
@@ -48,9 +51,11 @@ scripts (`pinn_torch_1d.py`, `pinn_surface_3d.py`, `visualize_pinn.py`);
 
 ```
 src/wcf_biofilm/
+├── data.py                       # loads data/wcf_adsorption_data.csv
+├── classical.py                  # PSO/PFO/Freundlich/Langmuir, mass-balance surface, AICc
 ├── wcf_common.py                 # shared utilities used across the pipeline
 ├── pso_classical_fit.py          # pseudo-second-order kinetic fit (classical, non-linear least squares)
-├── ml_model_comparison.py        # six-model benchmark on kinetics data (GPR, poly, RF, XGBoost, PINN)
+├── ml_model_comparison.py        # kinetics benchmark (PSO, PFO, GPR, poly, RF, XGBoost, PINN)
 ├── concentration_analysis.py     # isotherm-arm and removal-% vs concentration analysis
 ├── unified_surface_physics.py    # four-parameter Freundlich + PSO mass-balance surface
 ├── pinn_torch_1d.py              # 1-D PSO-constrained physics-informed neural network
@@ -60,8 +65,11 @@ src/wcf_biofilm/
 scripts/
 └── make_block_diagram.py         # generates the MD/workflow schematic figure
 
-figures/                          # one script per manuscript figure, regenerates each panel
-results/                          # model outputs referenced in the manuscript (see note below)
+data/wcf_adsorption_data.csv      # all 14 measurements (single source of truth)
+revision/                         # analyses added for the CEJA revision (see below)
+tests/                            # regression tests for the reported numbers
+figures/                          # figures written by the scripts above
+results/                          # model outputs, revision summaries and run logs
 ```
 
 ## Reproducing results
@@ -78,16 +86,50 @@ Outputs (fitted constants, training curves, predicted surfaces) are written to `
 
 ## Data
 
-Experimental kinetics (`n=9`) and isotherm (`n=5`) measurements used to train
-and evaluate all models are described in the manuscript's Methods section
-(Section 3, "Adsorption Properties").
+All measurements are in `data/wcf_adsorption_data.csv` (kinetics arm, n = 9:
+C0 = 40 mg/L, V = 0.05 L, m = 1.2 g; isotherm arm, n = 5: C0 = 20–60 mg/L,
+V = 0.05 L, m = 0.5 g, contact time 170 min) and are loaded by every script through
+`wcf_biofilm/data.py`. The isotherm-arm uptakes were measured at 170 min, before a
+verified plateau, so they are q(170 min) rather than equilibrium q_e.
+
+## Revision (v1.1) — what changed and why
+
+1. **PINN loss scaling (both PINNs).** In the submitted code the data term was on
+   standardised q and the PSO residual in raw units (mg g⁻¹ min⁻¹), so the physics term
+   carried roughly 1/3,000 (1-D) to 1/5,000 (3-input) of its nominal weight; an ablation shows the submitted 1-D PINN
+   gives the same predictions with the physics term switched off. The corrected
+   formulation (`scaling="nondim"`, now the default) divides every residual by its
+   natural scale (q/Q, dq/dt·T/Q), imposes q(0) = 0 exactly, ramps the physics weight
+   and finishes with L-BFGS. The submitted formulation remains available as
+   `scaling="raw"` and reproduces the submitted numbers (tests/test_pinn.py).
+2. **Benchmark includes the classical equations.** PSO and PFO are evaluated with the
+   same leave-one-out protocol and a forward-extrapolation split.
+3. **Multi-seed reporting.** Stochastic models are reported over 5 seeds.
+4. **Unified surface.** Governing equations and the three fitted parameters (K_f, n, k₂)
+   are stated explicitly; a joint fit that models the isotherm arm as q(170 min) is
+   compared with the sequential route, with leave-one-out CV and bootstrap intervals.
+5. **Single data file, regression tests and CI** that check the reported numbers.
+
+Reproduce the revision analysis:
+
+```bash
+cd revision
+python benchmark_classical_ml.py          # classical + data-driven models (minutes)
+python unified_surface_analysis.py        # unified surface, LOO, bootstrap
+# PINN grids: one fit per job (resumable), e.g.
+python run_pinn1d_job.py nd_l1 0 loo 3
+WCF_WALL_BUDGET=150 python run_pinn3d_job.py nondim 0 full 0
+python summarise_pinn1d.py ../results/revision_pinn1d_jobs.jsonl
+python summarise_pinn3d.py ../results/revision_pinn3d_jobs.jsonl
+python make_revision_figures.py           # figures/rev_fig1..4
+pytest -v ../tests
+```
 
 ## Note on `results/`
 
-Large binary artifacts (`*.ckpt` model checkpoints) are excluded from version
-control via `.gitignore`. If you need the exact trained weights used in the
-paper, either regenerate them by running the scripts above, or track them
-separately via [Git LFS](https://git-lfs.github.com) if you want them versioned.
+Model checkpoints (`*.ckpt`) are not version-controlled; rerun the scripts to
+regenerate them. Per-job PINN outputs from the revision grids are kept as
+`results/revision_pinn*_jobs.jsonl` so every summary number can be traced to a run.
 
 ## Citation
 
@@ -99,8 +141,9 @@ If you use this code, please cite:
              Derived PVA/TiO2/Cellulose Biofilm: A Molecular Dynamics and
              Physics-Informed Predictive Framework},
   author  = {Faisal, Md Shajjad Khan and Majumder, Tinon Turja and Islam, Kazi Sirajul
-             and Mainuddin, Sk. and Hossain, Mohammad Forhad and Sultana, Niger},
-  journal = {Journal of Environmental Chemical Engineering},
+             and Mainuddin, Sk. and Hossain, Mohammad Forhad and Sultana, Niger
+             and Hasan, Mahmudul},
+  journal = {Chemical Engineering Journal Advances},
   year    = {2026},
   note    = {Under review}
 }

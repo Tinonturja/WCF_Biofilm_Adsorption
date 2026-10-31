@@ -1,0 +1,16 @@
+
+== raw  (5 seeds)
+  k2 [0.0026  0.00343]  Kf [0.01378 0.01467]  n [0.938 0.982]
+  in-sample R2 all/kin/iso [1. 1.] [0.9997 0.9999] [1. 1.]
+  test ranges {'t60_C30_10gL': [0.391, 0.673], 't170_C40_5gL': [0.825, 2.164], 't60_C40_24gL': [0.535, 0.539]}
+  test spread % {'t60_C30_10gL': np.float64(55.2), 't170_C40_5gL': np.float64(80.4), 't60_C40_24gL': np.float64(0.9)}
+  LOO seed 0: R2 all=0.9553 kin=0.9962 iso=0.8698  MAE all=0.0917 kin=0.0140 iso=0.2315
+  LOO seed 1: R2 all=0.9689 kin=0.9975 iso=0.9095  MAE all=0.0832 kin=0.0108 iso=0.2136
+
+== nondim  (5 seeds)
+  k2 [0.01158 0.01483]  Kf [0.03189 0.03697]  n [0.71  0.729]
+  in-sample R2 all/kin/iso [0.996 0.997] [0.9826 0.9943] [0.9909 0.9927]
+  test ranges {'t60_C30_10gL': [0.78, 0.827], 't170_C40_5gL': [1.964, 2.742], 't60_C40_24gL': [0.53, 0.546]}
+  test spread % {'t60_C30_10gL': np.float64(5.8), 't170_C40_5gL': np.float64(31.6), 't60_C40_24gL': np.float64(3.0)}
+  LOO seed 0: R2 all=0.9894 kin=0.9691 iso=0.9743  MAE all=0.0610 kin=0.0347 iso=0.1085
+  LOO seed 1: R2 all=0.9899 kin=0.9799 iso=0.9739  MAE all=0.0557 kin=0.0259 iso=0.1094
