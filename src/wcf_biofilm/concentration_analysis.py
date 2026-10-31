@@ -48,7 +48,10 @@ MODELS = {
     "GPR (Matern 5/2)":   gpr_factory,
     "Polynomial (deg 2)": lambda: Pipeline([("p", PolynomialFeatures(2)),
                                             ("l", LinearRegression())]),
-    "Random Forest":      lambda: RandomForestRegressor(n_estimators=100, random_state=42),
+    # depth 2, as stated in the manuscript (Section 4.2); with n = 4 training points per
+    # LOO fold this changes the training R2 only (0.9544 -> 0.9510), not the LOO score
+    "Random Forest":      lambda: RandomForestRegressor(n_estimators=100, max_depth=2,
+                                                    random_state=42),
 }
 
 

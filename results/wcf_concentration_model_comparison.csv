@@ -1,8 +1,8 @@
 Response,Model,Train_R2,LOO_R2,LOO_MAE
 q_e vs C_e,GPR (Matern 5/2),0.9771,0.4825,0.5031
 q_e vs C_e,Polynomial (deg 2),0.9595,0.2786,0.546
-q_e vs C_e,Random Forest,0.9544,0.5363,0.5151
+q_e vs C_e,Random Forest,0.951,0.5363,0.5151
 removal % vs C_0,GPR (Matern 5/2),0.9699,0.3474,3.965
 removal % vs C_0,Polynomial (deg 2),0.9363,0.252,3.8305
-removal % vs C_0,Random Forest,0.945,0.4996,2.7267
+removal % vs C_0,Random Forest,0.9448,0.4996,2.7267
 q_e vs C_e,Freundlich (refit),0.9551,0.7807,0.2868
