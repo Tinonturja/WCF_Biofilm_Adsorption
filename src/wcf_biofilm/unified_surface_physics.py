@@ -199,7 +199,7 @@ ax3.set_facecolor("#fbfbf9"); ax3.grid(color=PAL["grid"], lw=0.8, zorder=0)
 for dos, color, ls, label in [
     (10, PAL["gpr"], "-", "10 g/L (isotherm dosage)"),
     (24, PAL["frnd"], (0, (5, 1.5)), "24 g/L (kinetics dosage)"),
-    (5,  PAL["kin"], "--", "5 g/L (hypothetical lower)"),
+    (5,  PAL["kin"], "--", "5 g/L (untested; illustrative)"),
 ]:
     t_f = np.linspace(0, 180, 200)
     q_f = predict_q(t_f, 40, dos)
