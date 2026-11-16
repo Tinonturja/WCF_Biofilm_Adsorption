@@ -1,7 +1,10 @@
 """Classical kinetic / isotherm equations, fitting helpers and information criteria.
 
-Units: t [min], q [mg/g], C [mg/L], k1 [1/min], k2 [g/(mg min)], V/m [L/g].
+Units: t [min], q [mg/g], C [mg/L], k1 [1/min], k2 [g/(mg min)], V/m [L/g],
+K_f [(mg/g)(L/mg)^(1/n)], n [dimensionless], q_max [mg/g], K_L [L/mg].
 Freundlich is written q_e = K_f * C_e**(1/n), as in the manuscript.
+The isotherm-arm data are uptakes at t = 170 min, so fitted isotherm constants are
+apparent values at 170 min, not verified equilibrium constants.
 """
 import numpy as np
 from scipy.optimize import curve_fit, brentq, least_squares

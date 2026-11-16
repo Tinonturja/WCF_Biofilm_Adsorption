@@ -135,9 +135,9 @@ a1.plot(ce_f, freundlich(ce_f, *popt), ls=(0, (5, 1.5)), color=PAL["frnd"], lw=1
         label=f"Freundlich refit (R²={frnd_refit_r2:.3f})", zorder=3)
 a1.scatter(Ce, qe, color=PAL["data"], s=45, zorder=6, edgecolors="white", lw=0.9,
            label="Experimental data")
-a1.set_xlabel("Equilibrium concentration $C_e$ (mg L$^{-1}$)")
-a1.set_ylabel("$q_e$ (mg g$^{-1}$)")
-a1.set_title("Equilibrium uptake rises with concentration", fontsize=11)
+a1.set_xlabel("Residual concentration at 170 min, $C_e$ (mg L$^{-1}$)")
+a1.set_ylabel("Uptake at 170 min, $q$ (mg g$^{-1}$)")
+a1.set_title("Uptake at 170 min rises with concentration", fontsize=11)
 for sp in ["top", "right"]: a1.spines[sp].set_visible(False)
 a1.legend(fontsize=8, frameon=False)
 

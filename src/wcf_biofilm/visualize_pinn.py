@@ -70,7 +70,7 @@ a2.plot(D["c_fine"], D["iso_curve"], color=PAL["iso"], lw=2,
 a2.scatter(D["c_iso"], D["q_iso"], color=PAL["data"], s=52, zorder=6,
            edgecolors="white", lw=0.9, label=f"Isotherm data (V/m={VM_ISO:.4f})")
 a2.set_xlabel("Initial concentration $C_0$ (ppm)")
-a2.set_ylabel("$q_e$ (mg g$^{-1}$)")
+a2.set_ylabel("Uptake at 170 min, $q$ (mg g$^{-1}$)")
 a2.set_title("(b) Isotherm arm", fontsize=11)
 a2.legend(fontsize=8.5, frameon=False)
 

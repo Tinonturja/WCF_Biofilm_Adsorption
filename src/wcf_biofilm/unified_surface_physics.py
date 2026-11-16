@@ -139,7 +139,7 @@ a2.plot(co_f, qe_f, color=PAL["frnd"], lw=2,
 a2.scatter(Co_iso, qe_iso, color=PAL["data"], s=50, zorder=6,
            edgecolors="white", lw=0.9, label="Isotherm data (10 g/L)")
 a2.set_xlabel("Initial concentration $C_0$ (ppm)")
-a2.set_ylabel("$q_e$ (mg g$^{-1}$)")
+a2.set_ylabel("$q$ (mg g$^{-1}$); data at 170 min")
 a2.set_title("Isotherm arm (in-sample)", fontsize=11)
 for sp in ["top", "right"]: a2.spines[sp].set_visible(False)
 a2.legend(fontsize=9, frameon=False)
