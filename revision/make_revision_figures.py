@@ -23,7 +23,7 @@ p3 = J("revision_pinn3d_summary.json")
 # palette: categorical slots 1-3 (validated) + neutral grey; text stays in ink colours
 BLUE, ORANGE, AQUA, GREY = "#2a78d6", "#eb6834", "#1baf7a", "#8a8a85"
 INK, INK2, GRID = "#1f1f1e", "#5f5e5a", "#e6e5e0"
-plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 10, "axes.edgecolor": INK2,
+plt.rcParams.update({"font.family": "DejaVu Serif",  # same typeface as wcf_common.py "font.size": 10, "axes.edgecolor": INK2,
                      "axes.labelcolor": INK, "xtick.color": INK2, "ytick.color": INK2,
                      "text.color": INK, "axes.linewidth": 0.8, "savefig.dpi": 600,
                      "savefig.bbox": "tight", "legend.frameon": False})
@@ -97,8 +97,8 @@ fig.savefig(os.path.join(FIG, "rev_fig2_pinn_ablation.png"))
 plt.close(fig)
 
 # ------------------------------------------------------------- Fig R3: learned kinetic curves
-rows = [json.loads(l) for l in open(os.path.join(HERE, "res1d.jsonl"))] if os.path.exists(
-    os.path.join(HERE, "res1d.jsonl")) else []
+JOBS1D = os.path.join(RES, "revision_pinn1d_jobs.jsonl")   # committed per-job outputs
+rows = [json.loads(l) for l in open(JOBS1D)] if os.path.exists(JOBS1D) else []
 from wcf_biofilm.classical import pso
 fig, ax = plt.subplots(figsize=(6.4, 4.2))
 tf = np.linspace(0, 180, 181)
