@@ -20,6 +20,20 @@ accompanying paper.
 | PSO leave-one-out R² / MAE | 0.9969 / 0.0109 mg/g |
 | PSO-constrained PINN (corrected, λ = 1, 5 seeds): `q_e`, `k_2` | 0.9361 ± 0.0001 mg/g, 0.02520 ± 0.00001 g·mg⁻¹·min⁻¹ |
 | PSO-constrained PINN leave-one-out R² / MAE | 0.9969 / 0.0109 mg/g |
+| Model choice, PSO vs PFO (AICc) | −76.5 vs −69.7 (Akaike weight of PSO 0.97) |
+
+| Quantity (both arms, n = 14) | Value |
+| :--- | :--- |
+| Unified surface, in-sample R² (kinetics / concentration series) | 0.962 / 0.992 |
+| Unified surface, leave-one-out R² (sequential and joint routes) | 0.988 |
+| 3-input PINN (corrected, 5 seeds): `k_2`, `K_f`, `n` | 0.012–0.015, 0.032–0.037, 0.71–0.73 |
+| 3-input PINN leave-one-out R² | 0.989–0.990 |
+
+The concentration-series points are uptakes at 170 min, and the kinetic curve was still
+rising at 170 min, so the fitted `q_e` values are extrapolated asymptotes rather than
+measured equilibrium values. The time needed to approach equilibrium depends on the
+kinetic model (95 % of the asymptote after about 2 h under PFO, about 13 h under PSO);
+extended contact-time experiments are future work.
 
 See **Revision (v1.1)** below for what changed relative to the submitted version.
 
@@ -57,7 +71,7 @@ src/wcf_biofilm/
 ├── pso_classical_fit.py          # pseudo-second-order kinetic fit (classical, non-linear least squares)
 ├── ml_model_comparison.py        # kinetics benchmark (PSO, PFO, GPR, poly, RF, XGBoost, PINN)
 ├── concentration_analysis.py     # isotherm-arm and removal-% vs concentration analysis
-├── unified_surface_physics.py    # four-parameter Freundlich + PSO mass-balance surface
+├── unified_surface_physics.py    # three-parameter Freundlich + PSO mass-balance surface
 ├── pinn_torch_1d.py              # 1-D PSO-constrained physics-informed neural network
 ├── pinn_surface_3d.py            # three-input PINN over (t, C0, dosage)
 └── visualize_pinn.py             # PINN training/validation figure generation
@@ -125,6 +139,31 @@ python make_revision_figures.py           # figures/rev_fig1..4
 pytest -v ../tests
 ```
 
+### Reproducibility check
+
+Every number in the revision was produced twice, from a clean checkout with the pinned
+environment in `requirements.txt`, on two different computers (Apple-silicon macOS and
+x86-64 Linux). `revision/compare_reproduction.py` compares a re-run with the committed
+results and prints the largest difference per quantity:
+
+```bash
+python revision/compare_reproduction.py RERUN_RESULTS_DIR RERUN_REVISION_DIR
+```
+
+Classical fits, data-driven models and the unified surface agree to printed precision.
+PINN fits agree to within the seed-to-seed spread (for example, 3-input PINN
+leave-one-out R² 0.9893/0.9899 vs 0.9894/0.9899 for seeds 0 and 1).
+
+## Versions
+
+| Version | Content |
+| :--- | :--- |
+| v1.0.0 / v1.0.1 | Code as submitted with the manuscript (v1.0.1 archived on Zenodo) |
+| v1.1.0 | Revision for CEJA-D-26-01907: corrected PINN loss scaling, classical baselines, multi-seed and leave-one-out evaluation, joint surface fit, regenerated figures, reproduction check |
+
+The submitted PINN formulation stays available in v1.1.0 as `scaling="raw"`, so both
+versions' numbers can be regenerated from the same code.
+
 ## Note on `results/`
 
 Model checkpoints (`*.ckpt`) are not version-controlled; rerun the scripts to
@@ -148,6 +187,10 @@ If you use this code, please cite:
   note    = {Under review}
 }
 ```
+
+To cite the software itself, use the Zenodo concept DOI, which always resolves to the
+latest version: [10.5281/zenodo.21952872](https://doi.org/10.5281/zenodo.21952872).
+Each release also has its own version DOI, listed on the Zenodo record.
 
 ## License
 
